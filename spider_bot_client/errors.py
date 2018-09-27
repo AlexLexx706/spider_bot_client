@@ -1,0 +1,4 @@
+# error codes
+NO_ERROR = 0
+WRONG_COMMAND = 1
+UNKNOWN_ERROR = 2
