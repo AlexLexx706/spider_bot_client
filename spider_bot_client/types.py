@@ -5,7 +5,7 @@ import ctypes
 class Header(ctypes.Structure):
     _fields_ = (
         ('cmd', ctypes.c_int32),
-        ('resp_flag', ctypes.c_int8),
+        ('resp_flag', ctypes.c_int32),
         ('size', ctypes.c_uint32))
     _pack_ = 1
 
@@ -45,6 +45,7 @@ class GetStateRes(ctypes.Structure):
         ('rear_left_leg', LegDesc))
     _pack_ = 1
 
+print("sizeof(GetStateRes):%s" % (ctypes.sizeof(GetStateRes)))
 
 class SetActionCmd(ctypes.Structure):
     # actions types
