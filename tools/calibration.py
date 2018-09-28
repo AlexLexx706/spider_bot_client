@@ -2,18 +2,28 @@ import spider_bot_client
 from spider_bot_client import types
 from spider_bot_client import errors
 import math
+import os
+
+CALIB_NUM_FILE = 'calib_num.txt'
 
 
 def main():
+
+    cond = input('Are you sure to start calibration, yes or not? ')
+    if 'n' in cond.lower():
+        exit(1)
+
     client = spider_bot_client.Client()
-    cond = input('Start from last bad calibration:type yes or no?')
     first = 0
-    if 'y' in cond.lower():
-        try:
-            with open('calib_num.txt', 'r') as file:
-                first = int(file.read())
-        except FileNotFoundError as e:
-            print(e)
+
+    if os.path.isfile(CALIB_NUM_FILE):
+        cond = input('Start from last bad calibration:type yes or no? ')
+        if 'y' in cond.lower():
+            try:
+                with open(CALIB_NUM_FILE, 'r') as file:
+                    first = int(file.read())
+            except FileNotFoundError as e:
+                print(e)
 
     calibrations_data = [
         {'address': 0, "min": -45, 'max': 45, "name": "front right leg 0"},
@@ -36,7 +46,7 @@ def main():
         input('reset addresses:')
         print("res:%s\n" % (
             client.manage_servo(
-                types.ManageServocmds.ResetAddressesCmd, 0, 0).error_desc, ))
+                types.ManageServoCmd.ResetAddressesCmd, 0, 0).error_desc, ))
 
     for index, calib_data in enumerate(calibrations_data):
         if index < first:
@@ -49,11 +59,11 @@ def main():
         input('set address:%s, %s:' % (addr, calib_data['name']))
         print("res:%s\n" % (
             client.manage_servo(
-                types.ManageServocmds.SetAddressCmd, addr, 0).error_desc, ))
+                types.ManageServoCmd.SetAddressCmd, addr, 0).error_desc, ))
 
         input('start EnableReadAngles, %s:' % (calib_data['name'], ))
         res = client.manage_servo(
-            types.ManageServocmds.EnableReadAngles,
+            types.ManageServoCmd.EnableReadAngles,
             addr,
             0).error_desc
         print("res:%s\n" % (res, ))
@@ -62,7 +72,7 @@ def main():
         input('calibrate min, turn servo to angle:%s, %s:' % (
             angle, calib_data['name']))
         res = client.manage_servo(
-            types.ManageServocmds.SetMinLimmitCmd,
+            types.ManageServoCmd.SetMinLimmitCmd,
             addr,
             angle / 180. * math.pi)
         print("res:%s\n" % (res.error_desc, ))
@@ -74,7 +84,7 @@ def main():
         input('calibrate max, turn servo to angle:%s, %s:' % (
             angle, calib_data['name']))
         res = client.manage_servo(
-            types.ManageServocmds.SetMaxLimmitCmd,
+            types.ManageServoCmd.SetMaxLimmitCmd,
             addr,
             angle / 180.0 * math.pi)
         print("res:%s\n" % (res.error_desc, ))
@@ -89,7 +99,7 @@ def main():
         input('move servo %d to:%s angle, %s' % (
             addr, angle, calib_data['name']))
         res = client.manage_servo(
-            types.ManageServocmds.MoveServo,
+            types.ManageServoCmd.MoveServo,
             addr,
             angle / 180.0 * math.pi).error_desc
 
@@ -99,7 +109,7 @@ def main():
         input('move servo %s to:%s angle, %s' % (
             addr, angle, calib_data['name']))
         res = client.manage_servo(
-            types.ManageServocmds.MoveServo,
+            types.ManageServoCmd.MoveServo,
             addr,
             angle / 180.0 * math.pi).error_desc
 
@@ -108,14 +118,15 @@ def main():
     input('enable read angles:')
     print(" res:%s" % (
         client.manage_servo(
-            types.ManageServocmds.EnableReadAngles,
+            types.ManageServoCmd.EnableReadAngles,
             addr,
             0).error_desc, ))
 
     input('unload servo')
     res = client.manage_servo(
-        types.ManageServocmds.UnloadServosCmd,
+        types.ManageServoCmd.UnloadServosCmd,
         addr,
         angle).error_desc
 
     print("res:%s" % (res, ))
+    exit(0)

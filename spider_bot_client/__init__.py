@@ -7,7 +7,8 @@ from spider_bot_client import cmds
 
 
 LOG = logging.getLogger(__name__)
-HOST = '192.168.100.22'
+# HOST = '192.168.100.22'
+HOST = '127.0.0.1'
 PORT = 8888
 NOTIFY_PORT = 8889
 MAX_PACKET_SIZE = 800
