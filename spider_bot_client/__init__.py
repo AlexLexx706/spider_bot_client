@@ -2,15 +2,15 @@ import socket
 import logging
 import threading
 import ctypes
+import os
 from spider_bot_client import types
 from spider_bot_client import cmds
 
 
 LOG = logging.getLogger(__name__)
-# HOST = '192.168.100.22'
-HOST = '127.0.0.1'
-PORT = 8888
-NOTIFY_PORT = 8889
+HOST = os.environ.get('SB_HOST', '192.168.100.22')
+PORT = int(os.environ.get('SB_PORT', 8888))
+NOTIFY_PORT = int(os.environ.get('SB_NOTIFY_PORT', 8889))
 MAX_PACKET_SIZE = 800
 
 
@@ -33,11 +33,11 @@ class Client:
     def set_action(self, action, get_responce=False):
         # 1. send cmd
         cmd = types.SetActionCmd()
-        cmds.header.cmd = cmds.CMD_SET_ACTION
-        cmds.header.resp_flag = get_responce
-        cmds.header.size = ctypes.sizeof(types.SetActionCmd) -\
+        cmd.header.cmd = cmds.CMD_SET_ACTION
+        cmd.header.resp_flag = get_responce
+        cmd.header.size = ctypes.sizeof(types.SetActionCmd) -\
             ctypes.sizeof(types.Header)
-        cmds.action = action
+        cmd.action = action
 
         self.sock.sendto(
             bytes(cmd),
@@ -65,12 +65,12 @@ class Client:
 
             # 3. send cmd
             cmd = types.AddNotifyCmd()
-            cmds.header.cmd = cmds.CMD_ADD_NOTIFY
-            cmds.header.resp_flag = get_responce
-            cmds.header.size = ctypes.sizeof(types.AddNotifyCmd) -\
+            cmd.header.cmd = cmds.CMD_ADD_NOTIFY
+            cmd.header.resp_flag = get_responce
+            cmd.header.size = ctypes.sizeof(types.AddNotifyCmd) -\
                 ctypes.sizeof(types.Header)
-            cmds.port = port
-            print("add_notify port:", cmds.port)
+            cmd.port = port
+            print("add_notify port:", cmd.port)
             self.sock.sendto(
                 bytes(cmd),
                 self.server_address)
@@ -94,11 +94,11 @@ class Client:
 
             # 2. send cmd
             cmd = types.RmNotifyCmd()
-            cmds.header.cmd = cmds.CMD_RM_NOTIFY
-            cmds.header.resp_flag = get_responce
-            cmds.header.size = ctypes.sizeof(types.RmNotifyCmd) -\
+            cmd.header.cmd = cmds.CMD_RM_NOTIFY
+            cmd.header.resp_flag = get_responce
+            cmd.header.size = ctypes.sizeof(types.RmNotifyCmd) -\
                 ctypes.sizeof(types.Header)
-            cmds.port = self.notify_port
+            cmd.port = self.notify_port
             self.sock.sendto(
                 bytes(cmd),
                 self.server_address)
@@ -155,12 +155,12 @@ class Client:
 
     def set_leg_geometry(self, leg_num, leg_geometry, get_responce=False):
         cmd = types.SetLegGeometry()
-        cmds.header.cmd = cmds.CMD_SET_LEG_GEOMETRY
-        cmds.header.resp_flag = get_responce
-        cmds.header.size = ctypes.sizeof(types.SetLegGeometry) -\
+        cmd.header.cmd = cmds.CMD_SET_LEG_GEOMETRY
+        cmd.header.resp_flag = get_responce
+        cmd.header.size = ctypes.sizeof(types.SetLegGeometry) -\
             ctypes.sizeof(types.Header)
-        cmds.leg_num = leg_num
-        cmds.geometry = leg_geometry
+        cmd.leg_num = leg_num
+        cmd.geometry = leg_geometry
 
         self.sock.sendto(
             bytes(cmd),
