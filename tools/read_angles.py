@@ -9,13 +9,13 @@ def main():
 
     addr = 2
     res = client.manage_servo(
-        types.ManageServocmds.UnloadServosCmd,
+        types.ManageServoCmd.UnloadServosCmd,
         addr,
         0).error
     print("res:%s" % (res, ))
 
     input('start EnableReadAngles:')
     print("res:%s" % (client.manage_servo(
-        types.ManageServocmds.EnableReadAngles,
-        types.ManageServocmds.BroadcastAddr,
+        types.ManageServoCmd.EnableReadAngles,
+        types.ManageServoCmd.BroadcastAddr,
         0).error, ))
