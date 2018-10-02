@@ -12,7 +12,8 @@ setup(
         'console_scripts': [
             'calibration= tools.calibration:main',
             'enable_steering = tools.enable_steering:main',
-            'read_angles = tools.read_angles:main'
+            'read_angles = tools.read_angles:main',
+            'set_led_error = tools.set_led_error:main'
         ],
     }
 )

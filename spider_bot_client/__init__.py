@@ -120,14 +120,11 @@ class Client:
         packet.address = address
         packet.limmit = limmit
 
-        print(1)
         self.sock.sendto(
             bytes(packet),
             self.server_address)
-        print(2)
 
         if get_responce:
-            print(3)
             # 2. recv data
             data, server = self.sock.recvfrom(4096)
             return types.ManageServoRes.from_buffer_copy(data)

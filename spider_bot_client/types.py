@@ -45,7 +45,6 @@ class GetStateRes(ctypes.Structure):
         ('rear_left_leg', LegDesc))
     _pack_ = 1
 
-print("sizeof(GetStateRes):%s" % (ctypes.sizeof(GetStateRes)))
 
 class SetActionCmd(ctypes.Structure):
     # actions types
@@ -98,6 +97,7 @@ class ManageServoCmd(ctypes.Structure):
     DisableReadAngles = 11
     MoveServo = 12
     MoveServoSin = 13
+    SetLedErrorCmd = 14
 
 
 class ManageServoRes(ctypes.Structure):
