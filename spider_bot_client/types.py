@@ -157,8 +157,7 @@ class SetLegGeometry(ctypes.Structure):
 class LimmitDesc(ctypes.Structure):
     _fields_ = (
         ('servo_value', ctypes.c_uint16),
-        ('model_value', ctypes.c_double))
-    _pack_ = 1
+        ('model_value', ctypes.c_float))
 
 
 class ServoLinkDesc(ctypes.Structure):
@@ -168,8 +167,7 @@ class ServoLinkDesc(ctypes.Structure):
         ('min', LimmitDesc),
         ('max', LimmitDesc),
         ('servo_angle', ctypes.c_uint16),
-        ('model_angle', ctypes.c_double))
-    _pack_ = 1
+        ('model_angle', ctypes.c_float))
 
 
 class GetServoStateCmd(ctypes.Structure):
@@ -185,3 +183,10 @@ class GetServoStateRes(ctypes.Structure):
         ('servo_id', ctypes.c_uint8),
         ('desc', ServoLinkDesc))
     _pack_ = 1
+
+
+print("sizeof(GetServoStateCmd):%s" % (ctypes.sizeof(GetServoStateCmd)))
+print("sizeof(GetServoStateRes):%s" % (ctypes.sizeof(GetServoStateRes)))
+print("sizeof(LimmitDesc):%s" % (ctypes.sizeof(LimmitDesc)))
+print("sizeof(ServoLinkDesc):%s" % (ctypes.sizeof(ServoLinkDesc)))
+
