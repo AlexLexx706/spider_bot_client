@@ -1,7 +1,6 @@
 import spider_bot_client
 from spider_bot_client import types
 import argparse
-import sys
 
 ERROR_MAP = {
     0: 'No alarm',

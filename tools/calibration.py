@@ -3,17 +3,31 @@ from spider_bot_client import types
 from spider_bot_client import errors
 import math
 import os
+import argparse
 
 CALIB_NUM_FILE = 'calib_num.txt'
 
 
 def main():
+    parser = argparse.ArgumentParser(
+        description='run calibration procedure of spider bot')
+    parser.add_argument(
+        '--host',
+        help="spider bot server ip, default:%s" % (spider_bot_client.HOST, ),
+        default=spider_bot_client.HOST)
+
+    parser.add_argument(
+        '--port',
+        help="spider bot server port, default:%s" % (spider_bot_client.PORT, ),
+        default=spider_bot_client.PORT)
+
+    args = parser.parse_args()
+    client = spider_bot_client.Client(host=args.host, port=args.port)
 
     cond = input('Are you sure to start calibration, yes or not? ')
     if 'n' in cond.lower():
         exit(1)
 
-    client = spider_bot_client.Client()
     first = 0
 
     if os.path.isfile(CALIB_NUM_FILE):
@@ -130,3 +144,7 @@ def main():
 
     print("res:%s" % (res, ))
     exit(0)
+
+
+if __name__ == "__main__":
+    main()
