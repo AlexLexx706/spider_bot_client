@@ -152,3 +152,36 @@ class SetLegGeometry(ctypes.Structure):
         ('leg_num', ctypes.c_uint32),
         ('geometry', LegGeometry),)
     _pack_ = 1
+
+
+class LimmitDesc(ctypes.Structure):
+    _fields_ = (
+        ('servo_value', ctypes.c_uint16),
+        ('model_value', ctypes.c_double))
+    _pack_ = 1
+
+
+class ServoLinkDesc(ctypes.Structure):
+    _fields_ = (
+        ('active', ctypes.c_uint8),
+        ('calibrated', ctypes.c_uint8),
+        ('min', LimmitDesc),
+        ('max', LimmitDesc),
+        ('servo_angle', ctypes.c_uint16),
+        ('model_angle', ctypes.c_double))
+    _pack_ = 1
+
+
+class GetServoStateCmd(ctypes.Structure):
+    _fields_ = (
+        ('header', Header),
+        ('servo_id', ctypes.c_uint8))
+    _pack_ = 1
+
+
+class GetServoStateRes(ctypes.Structure):
+    _fields_ = (
+        ('header', ResHeader),
+        ('servo_id', ctypes.c_uint8),
+        ('desc', ServoLinkDesc))
+    _pack_ = 1

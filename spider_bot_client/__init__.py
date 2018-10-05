@@ -167,3 +167,21 @@ class Client:
             # 2. recv data
             data, server = self.sock.recvfrom(4096)
             return types.ResHeader.from_buffer_copy(data)
+
+    def get_servo_state(self, servo_id):
+        '''return servo state
+            Sate structure can be used for get current servo angle value
+        '''
+        cmd = types.GetServoStateCmd()
+        cmd.header.cmd = cmds.CMD_GET_SERVO_STATE
+        cmd.header.resp_flag = 1
+        cmd.header.size = ctypes.sizeof(types.GetServoStateCmd) -\
+            ctypes.sizeof(types.Header)
+        cmd.servo_id = servo_id
+
+        self.sock.sendto(
+            bytes(cmd),
+            self.server_address)
+
+        data, server = self.sock.recvfrom(4096)
+        return types.GetServoStateRes.from_buffer_copy(data)
