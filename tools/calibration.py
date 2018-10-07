@@ -28,30 +28,48 @@ def main():
     if 'n' in cond.lower():
         exit(1)
 
+    only_one = False
     first = 0
 
-    if os.path.isfile(CALIB_NUM_FILE):
-        cond = input('Start from last bad calibration:type yes or no? ')
-        if 'y' in cond.lower():
+    # calibrate only one servo
+    if 'y' in input(
+            'Do you want to calibrate a specific servo, yes or not? ').lower():
+        while 1:
             try:
-                with open(CALIB_NUM_FILE, 'r') as file:
-                    first = int(file.read())
-            except FileNotFoundError as e:
-                print(e)
-
+                first = int(input('enter servo number: '))
+                if first >= 0 and first < types.SERVOS_COUNT:
+                    only_one = True
+                    break
+            except ValueError:
+                pass
+            if 'y' in input(
+                    "Invalid value, try again 'y' or quit 'n'? ").lower():
+                continue
+    # read last servo
+    if not only_one:
+        if os.path.isfile(CALIB_NUM_FILE):
+            cond = input('Start from last bad calibration:type yes or no? ')
+            if 'y' in cond.lower():
+                try:
+                    with open(CALIB_NUM_FILE, 'r') as file:
+                        first = int(file.read())
+                except FileNotFoundError as e:
+                    print(e)
+    print(first, only_one)
+    exit(1)
     calibrations_data = [
-        {'address': 0, "min": -45, 'max': 45, "name": "front right leg 0"},
-        {'address': 1, "min": -90, 'max': 90, "name": "front right leg 1"},
-        {'address': 2, "min": 0, 'max': 100, "name": "front right leg 2"},
-        {'address': 3, "min": -45, 'max': 45, "name": "rear right leg 0"},
-        {'address': 4, "min": -90, 'max': 90, "name": "rear right leg 1"},
-        {'address': 5, "min": 0, 'max': 100, "name": "rear right leg 2"},
-        {'address': 6, "min": -45, 'max': 45, "name": "front left leg 0"},
-        {'address': 7, "min": -90, 'max': 90, "name": "front left leg 1"},
-        {'address': 8, "min": 0, 'max': 100, "name": "front left leg 2"},
-        {'address': 9, "min": -45, 'max': 45, "name": "rear left leg 0"},
-        {'address': 10, "min": -90, 'max': 90, "name": "rear left leg 1"},
-        {'address': 11, "min": 0, 'max': 100, "name": "rear left leg 2"},
+        {'address': 0, "min": -45, 'max': 45, "name": "front right leg 0 (servo 0)"},
+        {'address': 1, "min": -90, 'max': 90, "name": "front right leg 1 (servo 1)"},
+        {'address': 2, "min": 0, 'max': 100, "name": "front right leg 2 (servo 2)"},
+        {'address': 3, "min": -45, 'max': 45, "name": "rear right leg 0 (servo 3)"},
+        {'address': 4, "min": -90, 'max': 90, "name": "rear right leg 1 (servo 4)"},
+        {'address': 5, "min": 0, 'max': 100, "name": "rear right leg 2 (servo 5)"},
+        {'address': 6, "min": -45, 'max': 45, "name": "front left leg 0 (servo 6)"},
+        {'address': 7, "min": -90, 'max': 90, "name": "front left leg 1 (servo 7)"},
+        {'address': 8, "min": 0, 'max': 100, "name": "front left leg 2 (servo 8)"},
+        {'address': 9, "min": -45, 'max': 45, "name": "rear left leg 0 (servo 9)"},
+        {'address': 10, "min": -90, 'max': 90, "name": "rear left leg 1 (servo 10)"},
+        {'address': 11, "min": 0, 'max': 100, "name": "rear left leg 2 (servo 11)"},
     ]
     # 1. get model state
     print("start calibration servos, first:%s" % (first, ))

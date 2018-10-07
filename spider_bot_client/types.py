@@ -1,5 +1,6 @@
 import ctypes
 
+SERVOS_COUNT = 12
 
 ##############################################
 class Header(ctypes.Structure):
